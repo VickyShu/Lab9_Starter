@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "558744ee000349819d71c1a4f7980052"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>                  
 
 <head>
   <meta charset="UTF-8">
@@ -88,20 +95,125 @@
   </main>
 
   <script>
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "ValidationError";
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
-      e.preventDefault();
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      try {
+        e.preventDefault();
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+          throw new ValidationError("No valid value");
+        }
+
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        console.log("Completed operation!")
+      }
     });
 
-    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+      let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+      // Start your code here
+      // You may move this JS to another file if you wish
+      let consoleLog = errorBtns[0];
+      consoleLog.addEventListener('click', e => {
+        console.log('Console Log Demo');
+      });
+      let consoleError = errorBtns[1];
+      consoleError.addEventListener('click', e => {
+        console.error('Console Error Demo');
+      });
+      let consoleCount = errorBtns[2];
+      consoleCount.addEventListener('click', e => {
+        console.count('Console Count Demo');
+      })
+      let consoleWarn = errorBtns[3];
+      consoleWarn.addEventListener('click', e => {
+        console.warn('Console Warn Demo');
+      });
+      let assert = errorBtns[4];
+      assert.addEventListener('click', e => {
+        const x = 5;
+        const y = 3;
+        const reason = 'x is expected to be less than y';
+        console.assert(x < y, {x, y, reason});
+      });
+      let clear = errorBtns[5];
+      clear.addEventListener('click', e => {
+        console.clear();
+      });
+      let Cdir = errorBtns[6];
+      Cdir.addEventListener('click', e => {
+        console.dir(Cdir);
+      });
+      let Cdirxml = errorBtns[7];
+      Cdirxml.addEventListener('click', e => {
+        console.dirxml(Cdirxml);
+      });
+      let groupStart = errorBtns[8];
+      groupStart.addEventListener('click', e => {
+        console.group('People');
+        console.info('Lisa');
+        console.info('Chris');
+        console.info('Eric');
+        console.info('John');
+      });
+      let groupEnd = errorBtns[9];
+      groupEnd.addEventListener('click', e => {
+        console.groupEnd('People');
+      });
+      let table = errorBtns[10];
+      table.addEventListener('click', e => {
+        var people = [
+          {
+            first: 'Lisa',
+            last: 'Ma',
+          },
+          {
+            first: 'Chris',
+            last: 'Green',
+            birthday: '20000423',
+          },
+          {
+            first: 'Eric',
+            last: 'John',
+          }
+        ];
+        console.table(people);
+      });
+      let time = errorBtns[11];
+      time.addEventListener('click', e => {
+        console.time();
+      });
+      let timeEnd = errorBtns[12];
+      timeEnd.addEventListener('click', e => {
+        console.timeEnd();
+      });
+      let trace = errorBtns[13];
+      trace.addEventListener('click', e => {
+        const first = () => { second(); };
+        const second = () => { third(); };
+        const third = () => { fourth(); };
+        const fourth = () => { console.trace(); };
+        first();
+      });
+      let global = errorBtns[14];
+      global.addEventListener('click', e => {
+        boom();
+      });
+      TrackJS.track('Testing TrackJS!');
   </script>
 </body>
 
